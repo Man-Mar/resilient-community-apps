@@ -13,7 +13,7 @@ def codegen_reload_data():
                     "function_params": [u"artifact_file_type", u"artifact_id", u"attachment_id", u"attachment_name", u"base64content", u"content_type", u"description", u"domain_list", u"domain_name", u"excel_defined_names", u"excel_ranges", u"file_name", u"file_path", u"https_url", u"incident_id", u"json2html_data", u"json2html_keys", u"resilient_search_query", u"resilient_search_template", u"resilient_url", u"rest_body", u"rest_cookies", u"rest_headers", u"rest_method", u"rest_url", u"rest_verify", u"shell_command", u"shell_param1", u"shell_param2", u"shell_param3", u"shell_remote", u"string_to_convert_to_attachment", u"task_id", u"utilities_certificate", u"utilities_epoch", u"utilities_parse_email_attachments", u"utilities_time", u"xml_source", u"xml_stylesheet", u"zipfile_password"], 
                     "datatables": [], 
                     "message_destinations": [u"fn_utilities"], 
-                    "functions": [u"utilities_attachment_hash", u"utilities_attachment_to_base64", u"utilities_attachment_zip_extract", u"utilities_attachment_zip_list", u"utilities_base64_to_artifact", u"utilities_base64_to_attachment", u"utilities_call_rest_api", u"utilities_domain_distance", u"utilities_email_parse", u"utilities_excel_query", u"utilities_expand_url", u"utilities_extract_ssl_cert_from_url", u"utilities_get_contact_info", u"utilities_json2html", u"utilities_parse_ssl_certificate", u"utilities_pdfid", u"utilities_resilient_search", u"utilities_shell_command", u"utilities_string_to_attachment", u"utilities_timer", u"utilities_xml_transformation"], 
+                    "functions": [u"utilities_attachment_hash",u"utilities_artifact_hash", u"utilities_attachment_to_base64", u"utilities_attachment_zip_extract", u"utilities_attachment_zip_list", u"utilities_base64_to_artifact", u"utilities_base64_to_attachment", u"utilities_call_rest_api", u"utilities_domain_distance", u"utilities_email_parse", u"utilities_excel_query", u"utilities_expand_url", u"utilities_extract_ssl_cert_from_url", u"utilities_get_contact_info", u"utilities_json2html", u"utilities_parse_ssl_certificate", u"utilities_pdfid", u"utilities_resilient_search", u"utilities_shell_command", u"utilities_string_to_attachment", u"utilities_timer", u"utilities_xml_transformation"], 
                     "phases": [], 
                     "automatic_tasks": [], 
                     "scripts": [], 
@@ -78,6 +78,7 @@ def customization_data(client=None):
     #     fn_utilities
     #   Functions:
     #     utilities_attachment_hash
+    #     utilities_artifact_hash
     #     utilities_attachment_to_base64
     #     utilities_attachment_zip_extract
     #     utilities_attachment_zip_list
