@@ -39,6 +39,8 @@ setup(
         'pywinrm>=0.3.0',
         'json2html',
         'lxml',
+        'python-magic',
+        'Unidecode',
         'mail-parser>=3.9.3'
     ],
     packages=find_packages(),
