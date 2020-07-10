@@ -8,6 +8,7 @@ import logging
 import requests
 from resilient_circuits import ResilientComponent, function, handler, StatusMessage, FunctionResult, FunctionError
 
+default_timeout=1800
 
 class FunctionComponent(ResilientComponent):
     """Component that implements Resilient function 'call_rest_api"""
@@ -25,6 +26,10 @@ class FunctionComponent(ResilientComponent):
             rest_cookies = self.get_textarea_param(kwargs.get("rest_cookies"))  # textarea
             rest_body = self.get_textarea_param(kwargs.get("rest_body"))  # textarea
             rest_verify = kwargs.get("rest_verify")  # boolean
+            rest_timeout = kwargs.get("timeout")  # number
+
+            if rest_timeout is None:
+             rest_timeout = default_timeout
 
             log = logging.getLogger(__name__)
             log.info("rest_method: %s", rest_method)
@@ -33,6 +38,7 @@ class FunctionComponent(ResilientComponent):
             log.info("rest_cookies: %s", rest_cookies)
             log.info("rest_body: %s", rest_body)
             log.info("rest_verify: %s", rest_verify)
+            log.info("rest_timeout: %s", rest_timeout)
 
             # Read newline-separated 'rest_headers' into a dictionary
             headers_dict = {}
@@ -56,7 +62,8 @@ class FunctionComponent(ResilientComponent):
                                     headers=headers_dict,
                                     cookies=cookies_dict,
                                     data=rest_body,
-                                    verify=rest_verify)
+                                    verify=rest_verify,
+                                    timeout=rest_timeout)
 
             try:
                 response_json = resp.json()

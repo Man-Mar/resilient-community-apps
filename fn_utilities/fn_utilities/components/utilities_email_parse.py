@@ -10,6 +10,8 @@ import shutil
 import json
 import base64
 import mailparser
+import magic
+from unidecode import unidecode
 from resilient_circuits import ResilientComponent, function, StatusMessage, FunctionResult, FunctionError
 from resilient_lib import ResultPayload, validate_fields, get_file_attachment_metadata, get_file_attachment, write_to_tmp_file
 
@@ -118,26 +120,40 @@ class FunctionComponent(ResilientComponent):
 
                         yield StatusMessage("Attachments found in email message")
                         attachments_found = parsed_email_dict.get("attachments")
+			attachments=[]
 
                         # Loop attachments found
                         for attachment in attachments_found:
 
-                            yield StatusMessage(u"Attempting to add {0} to Incident: {1}".format(attachment.get("filename"), fn_inputs.get("incident_id")))
-
+                            filename = unidecode(attachment.get("filename"))
+                            yield StatusMessage(u"Attempting to add {0} to Incident: {1}".format(filename, fn_inputs.get("incident_id")))
+                            
+                            att_data=attachment.get("payload")
+                            decoded_att_data=base64.b64decode(att_data)
+                            
                             # Write the attachment.payload to a temp file
-                            path_tmp_file, path_tmp_dir = write_to_tmp_file(data=attachment.get("payload"),
-                                                                            tmp_file_name=attachment.get("filename"),
+                            path_tmp_file, path_tmp_dir = write_to_tmp_file(data=decoded_att_data,
+                                                                            tmp_file_name=filename,
                                                                             path_tmp_dir=path_tmp_dir)
 
                             artifact_description = u"This email attachment was found in the parsed email message from: '{0}'".format(u"provided base64content" if fn_inputs.get("base64content") else attachment_metadata.get("name"))
+
+                            content = attachment.get("payload")
+                            content_type = magic.from_buffer(content, mime=True) \
+                            or "application/octet-stream"
 
                             # POST the artifact to Resilient as an 'Email Attachment' Artifact
                             res_client.post_artifact_file(uri=ARTIFACT_URI.format(fn_inputs.get("incident_id")),
                                                           artifact_type=EMAIL_ATTACHMENT_ARTIFACT_ID,
                                                           artifact_filepath=path_tmp_file,
                                                           description=artifact_description,
-                                                          value=attachment.get("filename"),
-                                                          mimetype=attachment.get("mail_content_type"))
+                                                          value=filename,
+                                                          #mimetype=attachment.get("mail_content_type"))
+                                                          mimetype=content_type)
+
+                            # then post it to the incident as an attachment 
+                            res_client.post_attachment('/incidents/{0}/attachments'.format(fn_inputs.get("incident_id")), path_tmp_file, filename='[SUSPECT] {0}'.format(filename), mimetype=content_type)
+                            attachments.append(filename)
 
                     results = rp.done(True, parsed_email_dict)
 
