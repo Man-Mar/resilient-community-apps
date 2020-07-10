@@ -120,12 +120,12 @@ class FunctionComponent(ResilientComponent):
 
                         yield StatusMessage("Attachments found in email message")
                         attachments_found = parsed_email_dict.get("attachments")
-			attachments=[]
+                        attachments=[]
 
                         # Loop attachments found
                         for attachment in attachments_found:
 
-                            filename = unidecode(attachment.get("filename"))
+                            filename = unidecode(attachment.get("filename")).replace("\r\n", "_").replace("\n", "_")
                             yield StatusMessage(u"Attempting to add {0} to Incident: {1}".format(filename, fn_inputs.get("incident_id")))
                             
                             att_data=attachment.get("payload")

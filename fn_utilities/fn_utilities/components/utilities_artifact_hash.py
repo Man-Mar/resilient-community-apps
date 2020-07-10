@@ -32,8 +32,8 @@ class FunctionComponent(ResilientComponent):
                 raise FunctionError("Error: artifact_id must be specified.")
 
             yield StatusMessage("Reading artifact...")
-                metadata_uri = "/incidents/{}/artifacts/{}".format(incident_id, artifact_id)
-                data_uri = "/incidents/{}/artifacts/{}/contents".format(incident_id, artifact_id)
+            metadata_uri = "/incidents/{}/artifacts/{}".format(incident_id, artifact_id)
+            data_uri = "/incidents/{}/artifacts/{}/contents".format(incident_id, artifact_id)
 
             client = self.rest_client()
             metadata = client.get(metadata_uri)
