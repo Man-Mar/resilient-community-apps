@@ -40,10 +40,10 @@ class FunctionComponent(ResilientComponent):
             data = client.get_content(data_uri)
 
             results = {
-                "filename": metadata["name"],
-                "content_type": metadata["content_type"],
-                "size": metadata["size"],
-                "created": metadata["created"]
+                "filename": metadata["attachment"]["name"],
+                "content_type": metadata["attachment"]["content_type"],
+                "size": metadata["attachment"]["size"],
+                "created": metadata["attachment"]["created"]
             }
 
             # Hashlib provides a list of all "algorithms_available", but there's duplication, so
@@ -65,7 +65,7 @@ class FunctionComponent(ResilientComponent):
                 else:
                     results[algo] = impl.hexdigest()
 
-            log.info(u"{} sha1={}".format(metadata["name"], results["sha1"]))
+            log.info(u"{} sha1={}".format(metadata["attachment"]["name"], results["sha1"]))
 
             # Produce a FunctionResult with the return value
             log.debug(json.dumps(results))
